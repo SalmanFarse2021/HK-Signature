@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets.js';
 import { useCart } from '../context/CartContext.jsx';
 import { useShip } from '../context/ShipContext.jsx';
@@ -13,7 +13,16 @@ const navLinks = [
 ];
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return !!localStorage.getItem('auth:user');
+    } catch {
+      return false;
+    }
+  });
   const { cartCount } = useCart();
   const { openSearch } = useShip();
 
@@ -28,6 +37,41 @@ const Navbar = () => {
       document.body.style.overflow = '';
     };
   }, [mobileOpen]);
+
+  const syncAuthState = useCallback(() => {
+    try {
+      setIsLoggedIn(!!localStorage.getItem('auth:user'));
+    } catch {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Refresh auth state when route changes or tab focus returns (captures same-tab login)
+    syncAuthState();
+  }, [location.pathname, location.search, syncAuthState]);
+
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (!e || e.key === 'auth:user' || e.key === 'auth:token') syncAuthState();
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', syncAuthState);
+    window.addEventListener('visibilitychange', syncAuthState);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', syncAuthState);
+      window.removeEventListener('visibilitychange', syncAuthState);
+    };
+  }, [syncAuthState]);
+
+  const handleLogout = () => {
+    try { localStorage.removeItem('auth:user'); } catch {}
+    try { localStorage.removeItem('auth:token'); } catch {}
+    setIsLoggedIn(false);
+    closeMobile();
+    navigate('/login');
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
@@ -66,13 +110,37 @@ const Navbar = () => {
                 {cartCount}
               </span>
             </Link>
-            <Link
-              to="/login"
-              className="inline-flex p-2 rounded-md hover:bg-gray-100"
-              aria-label="Account"
-            >
-              <img src={assets.profile_icon} alt="Account" className="h-5 w-5" />
-            </Link>
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  aria-label="Profile"
+                  onClick={closeMobile}
+                >
+                  <img src={assets.profile_icon} alt="Profile" className="h-5 w-5" />
+                  <span className="hidden sm:inline">Profile</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="inline-flex items-center gap-2 rounded-md border border-transparent px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  aria-label="Logout"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                aria-label="Login"
+                onClick={closeMobile}
+              >
+                <img src={assets.profile_icon} alt="Login" className="h-5 w-5" />
+                <span className="hidden sm:inline">Login</span>
+              </Link>
+            )}
 
             {/* Mobile toggle */}
             <button
@@ -133,14 +201,35 @@ const Navbar = () => {
                 <img src={assets.cart_icon} alt="Cart" className="h-4 w-4" />
                 Cart
               </Link>
-              <Link
-                to="/login"
-                onClick={closeMobile}
-                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                <img src={assets.profile_icon} alt="Login" className="h-4 w-4" />
-                Login
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to="/profile"
+                    onClick={closeMobile}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <img src={assets.profile_icon} alt="Profile" className="h-4 w-4" />
+                    Profile
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 text-left"
+                  >
+                    <img src={assets.profile_icon} alt="Logout" className="h-4 w-4" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={closeMobile}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  <img src={assets.profile_icon} alt="Login" className="h-4 w-4" />
+                  Login
+                </Link>
+              )}
             </nav>
           </div>
         </div>

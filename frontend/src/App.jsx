@@ -11,6 +11,7 @@ import Login from './pages/Login.jsx';
 import Orders from './pages/Orders.jsx';
 import PlaceOrder from './pages/PlaceOrder.jsx';
 import Product from './pages/Product.jsx';
+import MyProfile from './pages/MyProfile.jsx';
 
 const App = () => (
   <div className="min-h-screen bg-white flex flex-col">
@@ -25,6 +26,7 @@ const App = () => (
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<MyProfile />} />
         <Route path="/place-orders" element={<PlaceOrder />} />
         <Route path="/products/:productId?" element={<Product />} />
         <Route path="*" element={<Navigate to="/" replace />} />

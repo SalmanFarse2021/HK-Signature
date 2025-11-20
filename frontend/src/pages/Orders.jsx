@@ -11,7 +11,7 @@ const Orders = () => {
     if (!user) navigate('/login', { replace: true });
   }, [user, navigate]);
 
-  const userId = user?.id || user?.email || 'guest';
+  const userId = user?._id || user?.id || user?.email || 'guest';
   const [orders, setOrders] = useState(() => {
     try {
       const raw = localStorage.getItem(`orders:v1:${userId}`);
