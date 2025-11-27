@@ -1,4 +1,4 @@
-const RAW_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const RAW_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
 // If the site is served over HTTPS and the API base is HTTP, prefer same-origin + dev proxy
 const API_BASE = (typeof window !== 'undefined' && window.location?.protocol === 'https:' && RAW_BASE.startsWith('http:'))
   ? ''
@@ -7,7 +7,7 @@ const API_BASE = (typeof window !== 'undefined' && window.location?.protocol ===
 function baseOrigin() {
   if (API_BASE) return API_BASE;
   if (typeof window !== 'undefined' && window.location?.origin) return window.location.origin;
-  return 'http://localhost:5000';
+  return 'http://localhost:5001';
 }
 
 export function apiUrl(path) {
@@ -119,7 +119,7 @@ export async function changePasswordApi(payload) {
 
 export async function listMyOrdersApi(params = {}) {
   const url = new URL('/api/users/me/orders', baseOrigin());
-  Object.entries(params).forEach(([k,v])=> { if(v!=null && v!=='') url.searchParams.set(k,v); });
+  Object.entries(params).forEach(([k, v]) => { if (v != null && v !== '') url.searchParams.set(k, v); });
   const res = await fetch(url.toString(), { headers: authHeaders() });
   if (!res.ok) throw new Error(`Orders fetch failed: ${res.status}`);
   return res.json();

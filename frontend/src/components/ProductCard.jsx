@@ -68,7 +68,7 @@ const ProductCard = ({ product }) => {
         </div>
         <div className="mt-2">
           <p className="text-sm font-medium text-gray-900 line-clamp-1">{product.name}</p>
-          <p className="text-sm text-gray-600">${product.price}</p>
+          <p className="text-sm text-gray-600">৳ {product.price}</p>
         </div>
 
         <div className="mt-3 grid grid-cols-1 gap-2">

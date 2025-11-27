@@ -39,7 +39,7 @@ const Orders = () => {
       const all = allRaw ? JSON.parse(allRaw) : [];
       const idx = all.findIndex((o) => o.id === orderId);
       if (idx >= 0) { all[idx] = next.find((o) => o.id === orderId) || all[idx]; localStorage.setItem('orders:v1', JSON.stringify(all)); }
-    } catch {}
+    } catch { }
     alert('Payment stub: remaining balance paid.');
   };
 
@@ -78,7 +78,7 @@ const Orders = () => {
                   ))}
                 </div>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm">
-                  <div className="text-gray-700">Total: <span className="font-semibold text-gray-900">${o.total.toFixed(2)}</span> • Paid: ${o.paidNow.toFixed(2)} {o.remaining > 0 ? <>• Due: <span className="text-amber-700">${o.remaining.toFixed(2)}</span></> : null}</div>
+                  <div className="text-gray-700">Total: <span className="font-semibold text-gray-900">৳ {o.total.toFixed(2)}</span> • Paid: ৳ {o.paidNow.toFixed(2)} {o.remaining > 0 ? <>• Due: <span className="text-amber-700">৳ {o.remaining.toFixed(2)}</span></> : null}</div>
                   {o.paymentMethod === 'cod' && o.remaining > 0 ? (
                     <button onClick={() => payRemaining(o.id)} className="rounded-md bg-black px-3 py-1.5 text-white hover:bg-gray-900">Pay remaining</button>
                   ) : null}

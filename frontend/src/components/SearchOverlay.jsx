@@ -66,7 +66,7 @@ const SearchOverlay = () => {
                       <img src={p.image?.[0]} alt="" className="h-10 w-8 object-cover rounded" />
                       <div>
                         <p className="text-sm font-medium text-gray-900 line-clamp-1">{p.name}</p>
-                        <p className="text-xs text-gray-600">${p.price}</p>
+                        <p className="text-xs text-gray-600">৳ {p.price}</p>
                       </div>
                     </Link>
                   ))}

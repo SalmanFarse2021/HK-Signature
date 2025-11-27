@@ -17,7 +17,7 @@ const App = () => (
   <div className="min-h-screen bg-white flex flex-col">
     <Navbar />
     <SearchOverlay />
-    <main className="flex-1 bg-gray-50">
+    <main className="flex-1 bg-white">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />

@@ -18,7 +18,7 @@ const CartTotal = () => {
     return { list, subtotal };
   }, [items, selectedKeys]);
 
-  const ship = shippingMethod === 'express' ? 5 : 0;
+  const ship = 60;
   const discount = couponApplied ? Math.round(subtotal * couponApplied.discount) : 0;
   const total = Math.max(0, subtotal - discount) + ship;
 
@@ -34,7 +34,7 @@ const CartTotal = () => {
   const proceed = () => {
     const payload = {
       items: list.map(({ key, product, qty, size }) => ({ key, id: product._id, name: product.name, price: product.price, qty, size, image: product.image?.[0] })),
-      shippingMethod,
+      shippingMethod: 'standard',
       coupon: couponApplied,
       subtotal,
       ship,
@@ -42,7 +42,7 @@ const CartTotal = () => {
       total,
       createdAt: Date.now(),
     };
-    try { localStorage.setItem('checkout:current', JSON.stringify(payload)); } catch {}
+    try { localStorage.setItem('checkout:current', JSON.stringify(payload)); } catch { }
     navigate('/place-orders');
   };
 
@@ -50,21 +50,16 @@ const CartTotal = () => {
     <aside className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-gray-900">Order summary</h2>
       <dl className="mt-4 space-y-2 text-sm">
-        <div className="flex justify-between"><dt className="text-gray-600">Subtotal</dt><dd className="font-medium text-gray-900">${subtotal.toFixed(2)}</dd></div>
+        <div className="flex justify-between"><dt className="text-gray-600">Subtotal</dt><dd className="font-medium text-gray-900">৳ {subtotal.toFixed(2)}</dd></div>
         {couponApplied && (
-          <div className="flex justify-between"><dt className="text-gray-600">Discount ({couponApplied.code})</dt><dd className="font-medium text-emerald-600">- ${discount.toFixed(2)}</dd></div>
+          <div className="flex justify-between"><dt className="text-gray-600">Discount ({couponApplied.code})</dt><dd className="font-medium text-emerald-600">- ৳ {discount.toFixed(2)}</dd></div>
         )}
         <div className="flex items-center justify-between">
           <dt className="text-gray-600">Shipping</dt>
-          <dd>
-            <select value={shippingMethod} onChange={(e) => setShippingMethod(e.target.value)} className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-black/30">
-              <option value="standard">Standard (Free)</option>
-              <option value="express">Express ($5)</option>
-            </select>
-          </dd>
+          <dd className="font-medium text-gray-900">৳ 60.00</dd>
         </div>
         <div className="flex justify-between border-t border-gray-200 pt-2 text-base">
-          <dt className="font-semibold text-gray-900">Total</dt><dd className="font-semibold text-gray-900">${total.toFixed(2)}</dd>
+          <dt className="font-semibold text-gray-900">Total</dt><dd className="font-semibold text-gray-900">৳ {total.toFixed(2)}</dd>
         </div>
       </dl>
 

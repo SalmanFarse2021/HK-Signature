@@ -12,7 +12,7 @@ const About = () => {
           const data = await res.json();
           setCms(data.page || null);
         }
-      } catch {}
+      } catch { }
     })();
   }, []);
 

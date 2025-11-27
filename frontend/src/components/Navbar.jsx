@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets.js';
 import { useCart } from '../context/CartContext.jsx';
 import { useShip } from '../context/ShipContext.jsx';
-import BrandMark from './BrandMark.jsx';
+import SparklesLogo from './SparklesLogo.jsx';
 
 const navLinks = [
   { to: '/', label: 'Home', end: true },
@@ -66,8 +66,8 @@ const Navbar = () => {
   }, [syncAuthState]);
 
   const handleLogout = () => {
-    try { localStorage.removeItem('auth:user'); } catch {}
-    try { localStorage.removeItem('auth:token'); } catch {}
+    try { localStorage.removeItem('auth:user'); } catch { }
+    try { localStorage.removeItem('auth:token'); } catch { }
     setIsLoggedIn(false);
     closeMobile();
     navigate('/login');
@@ -80,7 +80,7 @@ const Navbar = () => {
           {/* Brand */}
           <div className="flex flex-1 items-center">
             <Link to="/" className="flex items-center" onClick={closeMobile}>
-              <BrandMark className="h-10" />
+              <SparklesLogo />
             </Link>
           </div>
 
@@ -110,37 +110,14 @@ const Navbar = () => {
                 {cartCount}
               </span>
             </Link>
-            {isLoggedIn ? (
-              <>
-                <Link
-                  to="/profile"
-                  className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
-                  aria-label="Profile"
-                  onClick={closeMobile}
-                >
-                  <img src={assets.profile_icon} alt="Profile" className="h-5 w-5" />
-                  <span className="hidden sm:inline">Profile</span>
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="inline-flex items-center gap-2 rounded-md border border-transparent px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
-                  aria-label="Logout"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
-                aria-label="Login"
-                onClick={closeMobile}
-              >
-                <img src={assets.profile_icon} alt="Login" className="h-5 w-5" />
-                <span className="hidden sm:inline">Login</span>
-              </Link>
-            )}
+            <Link
+              to="/login"
+              className="inline-flex p-2 rounded-md hover:bg-gray-100"
+              aria-label="Profile"
+              onClick={closeMobile}
+            >
+              <img src={assets.profile_icon} alt="Profile" className="h-5 w-5" />
+            </Link>
 
             {/* Mobile toggle */}
             <button
@@ -166,7 +143,7 @@ const Navbar = () => {
           <div className="fixed inset-0 z-40 bg-black/40" onClick={closeMobile} aria-hidden="true" />
           <div className="fixed inset-y-0 right-0 z-50 w-4/5 max-w-xs rounded-l-3xl border-l border-gray-200 bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between">
-              <BrandMark className="h-8" />
+              <SparklesLogo />
               <button
                 type="button"
                 className="p-2 rounded-md hover:bg-gray-100"
@@ -184,8 +161,7 @@ const Navbar = () => {
                   end={link?.end}
                   onClick={closeMobile}
                   className={({ isActive }) =>
-                    `block rounded-lg px-3 py-2 text-sm font-medium ${
-                      isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50'
+                    `block rounded-lg px-3 py-2 text-sm font-medium ${isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50'
                     }`
                   }
                 >

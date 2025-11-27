@@ -30,8 +30,8 @@ export default function EditProduct() {
           name: p?.name || '',
           price: p?.price ?? '',
           salePrice: p?.salePrice ?? '',
-          discountStart: p?.discountStart ? p.discountStart.slice(0,10) : '',
-          discountEnd: p?.discountEnd ? p.discountEnd.slice(0,10) : '',
+          discountStart: p?.discountStart ? p.discountStart.slice(0, 10) : '',
+          discountEnd: p?.discountEnd ? p.discountEnd.slice(0, 10) : '',
           stock: p?.stock ?? '',
           description: p?.description || '',
           category: p?.category || '',
@@ -73,7 +73,7 @@ export default function EditProduct() {
         subCategory: form.subCategory,
         brand: form.brand,
         price: Number(form.price),
-        salePrice: form.salePrice!==''? Number(form.salePrice): undefined,
+        salePrice: form.salePrice !== '' ? Number(form.salePrice) : undefined,
         stock: Number(form.stock),
         isActive: !!form.isActive,
         bestseller: !!form.bestseller,
@@ -123,14 +123,14 @@ export default function EditProduct() {
 
       <form onSubmit={onSave} className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-4 border rounded">
         <div className="space-y-3">
-            <label className="block">
-              <span className="label">Name</span>
-              <input className="input mt-1" value={form.name} onChange={(e) => updateField('name', e.target.value)} required />
-            </label>
-            <label className="block">
-              <span className="label">Description</span>
-              <textarea className="input mt-1 h-32" value={form.description} onChange={(e) => updateField('description', e.target.value)} />
-            </label>
+          <label className="block">
+            <span className="label">Name</span>
+            <input className="input mt-1" value={form.name} onChange={(e) => updateField('name', e.target.value)} required />
+          </label>
+          <label className="block">
+            <span className="label">Description</span>
+            <textarea className="input mt-1 h-32" value={form.description} onChange={(e) => updateField('description', e.target.value)} />
+          </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="block">
               <span className="label">Price</span>
@@ -143,13 +143,13 @@ export default function EditProduct() {
           </div>
           <div className="grid grid-cols-3 gap-3">
             <label className="block text-sm">Sale price
-              <input type="number" step="0.01" className="input mt-1" value={form.salePrice} onChange={(e)=> updateField('salePrice', e.target.value)} />
+              <input type="number" step="0.01" className="input mt-1" value={form.salePrice} onChange={(e) => updateField('salePrice', e.target.value)} />
             </label>
             <label className="block text-sm">Discount start
-              <input type="date" className="input mt-1" value={form.discountStart} onChange={(e)=> updateField('discountStart', e.target.value)} />
+              <input type="date" className="input mt-1" value={form.discountStart} onChange={(e) => updateField('discountStart', e.target.value)} />
             </label>
             <label className="block text-sm">Discount end
-              <input type="date" className="input mt-1" value={form.discountEnd} onChange={(e)=> updateField('discountEnd', e.target.value)} />
+              <input type="date" className="input mt-1" value={form.discountEnd} onChange={(e) => updateField('discountEnd', e.target.value)} />
             </label>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -175,9 +175,9 @@ export default function EditProduct() {
           <div>
             <div className="text-sm">Sizes</div>
             <div className="mt-1 flex flex-wrap gap-2">
-              {['S','M','L','XL','XXL'].map((s) => (
+              {['S', 'M', 'L', 'XL', 'XXL'].map((s) => (
                 <label key={s} className={`inline-flex items-center gap-2 border rounded px-3 py-1 ${form.sizes.has(s) ? 'bg-black text-white border-black' : 'bg-white text-gray-700 border-gray-300'}`}>
-                  <input type="checkbox" className="hidden" checked={form.sizes.has(s)} onChange={() => updateField('sizes', ((prev) => prev))} onClick={() => setForm((f)=>{const n=new Set(f.sizes); if(n.has(s)) n.delete(s); else n.add(s); return {...f, sizes:n};})} />
+                  <input type="checkbox" className="hidden" checked={form.sizes.has(s)} onChange={() => updateField('sizes', ((prev) => prev))} onClick={() => setForm((f) => { const n = new Set(f.sizes); if (n.has(s)) n.delete(s); else n.add(s); return { ...f, sizes: n }; })} />
                   {s}
                 </label>
               ))}
@@ -237,19 +237,19 @@ export default function EditProduct() {
                 <tbody>
                   {variants.map((v, idx) => (
                     <tr key={idx} className="border-t">
-                      <td className="p-1"><input value={v.size||''} onChange={(e)=> setVariants((arr)=>{const n=[...arr]; n[idx]={...n[idx], size:e.target.value}; return n;})} className="border rounded px-2 py-1 w-24" /></td>
-                      <td className="p-1"><input value={v.color||''} onChange={(e)=> setVariants((arr)=>{const n=[...arr]; n[idx]={...n[idx], color:e.target.value}; return n;})} className="border rounded px-2 py-1 w-24" /></td>
-                      <td className="p-1"><input value={v.style||''} onChange={(e)=> setVariants((arr)=>{const n=[...arr]; n[idx]={...n[idx], style:e.target.value}; return n;})} className="border rounded px-2 py-1 w-28" /></td>
-                      <td className="p-1"><input value={v.sku||''} onChange={(e)=> setVariants((arr)=>{const n=[...arr]; n[idx]={...n[idx], sku:e.target.value}; return n;})} className="border rounded px-2 py-1 w-32" /></td>
-                      <td className="p-1"><input type="number" value={v.stock||0} onChange={(e)=> setVariants((arr)=>{const n=[...arr]; n[idx]={...n[idx], stock:Number(e.target.value)}; return n;})} className="border rounded px-2 py-1 w-20" /></td>
-                      <td className="p-1"><input type="number" step="0.01" value={v.price||''} onChange={(e)=> setVariants((arr)=>{const n=[...arr]; n[idx]={...n[idx], price:e.target.value}; return n;})} className="border rounded px-2 py-1 w-24" /></td>
-                      <td className="p-1 text-right"><button type="button" onClick={()=> setVariants((arr)=> arr.filter((_,i)=> i!==idx))} className="px-2 py-1 border rounded">Remove</button></td>
+                      <td className="p-1"><input value={v.size || ''} onChange={(e) => setVariants((arr) => { const n = [...arr]; n[idx] = { ...n[idx], size: e.target.value }; return n; })} className="border rounded px-2 py-1 w-24" /></td>
+                      <td className="p-1"><input value={v.color || ''} onChange={(e) => setVariants((arr) => { const n = [...arr]; n[idx] = { ...n[idx], color: e.target.value }; return n; })} className="border rounded px-2 py-1 w-24" /></td>
+                      <td className="p-1"><input value={v.style || ''} onChange={(e) => setVariants((arr) => { const n = [...arr]; n[idx] = { ...n[idx], style: e.target.value }; return n; })} className="border rounded px-2 py-1 w-28" /></td>
+                      <td className="p-1"><input value={v.sku || ''} onChange={(e) => setVariants((arr) => { const n = [...arr]; n[idx] = { ...n[idx], sku: e.target.value }; return n; })} className="border rounded px-2 py-1 w-32" /></td>
+                      <td className="p-1"><input type="number" value={v.stock || 0} onChange={(e) => setVariants((arr) => { const n = [...arr]; n[idx] = { ...n[idx], stock: Number(e.target.value) }; return n; })} className="border rounded px-2 py-1 w-20" /></td>
+                      <td className="p-1"><input type="number" step="0.01" value={v.price || ''} onChange={(e) => setVariants((arr) => { const n = [...arr]; n[idx] = { ...n[idx], price: e.target.value }; return n; })} className="border rounded px-2 py-1 w-24" /></td>
+                      <td className="p-1 text-right"><button type="button" onClick={() => setVariants((arr) => arr.filter((_, i) => i !== idx))} className="px-2 py-1 border rounded">Remove</button></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <button type="button" onClick={()=> setVariants((arr)=> [...arr, { size:'', color:'', style:'', sku:'', stock:0, price:'' }])} className="mt-2 px-3 py-1.5 border rounded">Add Variant</button>
+            <button type="button" onClick={() => setVariants((arr) => [...arr, { size: '', color: '', style: '', sku: '', stock: 0, price: '' }])} className="mt-2 px-3 py-1.5 border rounded">Add Variant</button>
           </div>
 
           <div className="pt-2">

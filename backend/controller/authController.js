@@ -93,11 +93,15 @@ export async function handleGoogleCallback(req, res) {
     });
     if (!tokenRes.ok) {
       const txt = await tokenRes.text();
+      console.error('Google Token Exchange Failed:', tokenRes.status, txt);
       return res.status(500).json({ success: false, message: `Token exchange failed: ${tokenRes.status}`, details: txt });
     }
     const tokens = await tokenRes.json();
     const accessToken = tokens.access_token;
-    if (!accessToken) return res.status(500).json({ success: false, message: 'No access token' });
+    if (!accessToken) {
+      console.error('No access token in Google response:', tokens);
+      return res.status(500).json({ success: false, message: 'No access token' });
+    }
 
     // Fetch profile
     const profileRes = await fetch(GOOGLE_USERINFO_URL, {
@@ -149,17 +153,19 @@ export async function getMe(req, res) {
     if (!req.user?.id) return res.status(401).json({ success: false, message: 'Unauthorized' });
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    return res.json({ success: true, user: {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      avatar: user.avatar,
-      address: user.address,
-      phone: user.phone,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    }});
+    return res.json({
+      success: true, user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        address: user.address,
+        phone: user.phone,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      }
+    });
   } catch (err) {
     return res.status(500).json({ success: false, message: err?.message || 'Server error' });
   }

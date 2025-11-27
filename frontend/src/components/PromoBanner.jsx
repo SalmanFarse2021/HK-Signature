@@ -29,9 +29,9 @@ export default function PromoBanner() {
               </div>
               <div className="mt-1 text-sm text-gray-700">
                 {p.type === 'percent' && (<span>{p.value}% off</span>)}
-                {p.type === 'flat' && (<span>${p.value} off</span>)}
+                {p.type === 'flat' && (<span>৳ {p.value} off</span>)}
                 {p.type === 'bogo' && (<span>Buy 1 Get 1</span>)}
-                {p.type === 'free_shipping_over' && (<span>Free shipping over ${p.threshold}</span>)}
+                {p.type === 'free_shipping_over' && (<span>Free shipping over ৳ {p.threshold}</span>)}
               </div>
               {(p.startAt || p.endAt) && (
                 <div className="mt-1 text-xs text-gray-500">

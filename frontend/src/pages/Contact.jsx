@@ -32,7 +32,7 @@ const Contact = () => {
           const data = await res.json();
           setCms(data.page || null);
         }
-      } catch {}
+      } catch { }
     })();
   }, []);
 
@@ -45,20 +45,46 @@ const Contact = () => {
             {cms?.content ? (
               <div className="mt-2 prose prose-sm sm:prose-base max-w-none text-gray-800" dangerouslySetInnerHTML={{ __html: cms.content }} />
             ) : (
-              <p className="mt-3 text-sm sm:text-base text-gray-700 max-w-prose">
-                Have a question about your order or need styling help? We’re here for you.
-              </p>
-            )}
+              <div className="space-y-8 text-gray-600">
+                <div>
+                  <p className="text-lg leading-relaxed">
+                    Have a question or need assistance? We’re here to help.
+                  </p>
+                  <p className="mt-4">
+                    Our support team is always ready to assist you with:
+                  </p>
+                  <ul className="mt-2 space-y-1 list-disc list-inside ml-1">
+                    <li>Order inquiries</li>
+                    <li>Product information</li>
+                    <li>Shipping & delivery questions</li>
+                    <li>Returns & exchanges</li>
+                    <li>General support</li>
+                  </ul>
+                </div>
 
-            {!cms?.content && (
-              <div className="mt-6 space-y-2 text-sm text-gray-700">
-                <p><span className="font-medium text-gray-900">Email:</span> support@example.com</p>
-                <p><span className="font-medium text-gray-900">Phone:</span> +1 (555) 000‑0000</p>
-                <p><span className="font-medium text-gray-900">Hours:</span> Mon–Fri, 9am–6pm</p>
+                <div>
+                  <p className="font-medium text-gray-900 mb-3">You can reach us through the following:</p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">📧</span>
+                      <p><span className="font-medium text-gray-900">Email:</span> support@hksignature.com</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">📞</span>
+                      <p><span className="font-medium text-gray-900">Phone:</span> +880 123 456 789</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">📍</span>
+                      <p><span className="font-medium text-gray-900">Address:</span> Dhaka, Bangladesh</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">🕒</span>
+                      <p><span className="font-medium text-gray-900">Support Hours:</span> 9 AM – 9 PM (BD Time)</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
-
-            <img src={assets.contact_img} alt="Contact" className="mt-8 w-full h-auto rounded-2xl border border-gray-200" />
           </div>
 
           <div>

@@ -25,6 +25,15 @@ const HF_MODEL = process.env.HF_MODEL || 'black-forest-labs/FLUX.1-dev';
 const DIRECT_IMAGE_URL_REGEX = new RegExp(String.raw`https?://[^\s"'\\]+\.(?:png|jpe?g|webp)`, 'i');
 const ESCAPED_SLASH_REGEX = /\\\//g;
 
+// Context descriptions for categories
+const CATEGORY_CONTEXTS = {
+  'Saree': `Hand-Made–Painted Saree (শাড়ি). A hand-painted saree is a wearable piece of art. Each saree is individually designed and painted by skilled Bangladeshi artisans. The fabric—cotton, silk, muslin, or georgette—acts as a canvas for floral, abstract, cultural, or modern designs. The colors are vibrant, long-lasting, and carefully chosen to reflect elegance and tradition. No two pieces are identical, making every saree unique and exclusive.`,
+  'Three-Piece': `Hand-Painted Three-Piece (Salwar, Kameez & Dupatta). A hand-painted three-piece blends style with everyday comfort. The kameez, salwar, and dupatta showcase coordinated hand-painted motifs. Designs range from minimal strokes to detailed artwork. Perfect for casual outings, office wear, or festive events. Soft fabrics like cotton, viscose, or lawn give a graceful flow and breathable feel. Each set has handcrafted charm that mass-produced clothes can’t match.`,
+  'Salwar Kameez': `Hand-Painted Salwar Kameez. Individually painted by artisans to highlight the neckline, borders, sleeves, or full body. Ideal for those who love artistic and elegant outfits. Colors and patterns reflect traditional Bangladeshi aesthetics with a modern twist. Light, comfortable, and perfect for daily wear or semi-formal occasions.`,
+  'Panjabi': `Hand-Painted Panjabi (পাঞ্জাবি). A hand-painted panjabi gives classic menswear a creative flair. Crafted on cotton, endi, or silk fabrics for comfort and style. Detailed brushwork around the collar, cuffs, chest, or full front panel. Designs often include geometric patterns, folk art, floral themes, or modern abstract art. Perfect for festivals, Pohela Boishakh, Eid, cultural programs, or stylish casual wear.`,
+  'T-Shirt': `Hand-Painted T-Shirts. Hand-painted T-shirts add personality and creativity to everyday casual wear. Made on soft cotton tees to ensure comfort and durability. Artists paint custom designs—nature, cartoons, typography, cultural symbols, abstract art, etc. Because each piece is painted manually, every shirt becomes a one-of-a-kind fashion statement. Suitable for daily wear, gifts, or custom brand collections.`
+};
+
 function extractDirectImageUrl(str = '') {
   const match = str.match(DIRECT_IMAGE_URL_REGEX);
   return match ? match[0].replace(ESCAPED_SLASH_REGEX, '/') : null;
@@ -117,7 +126,7 @@ async function callFreepikImageAPI({ prompt }) {
         // Try common fields for base64 data or direct image URLs
         const str = JSON.stringify(data);
         // base64
-        const b64 = data?.image_base64 || data?.image?.b64 || data?.data?.[0]?.b64 || data?.images?.[0]?.b64 || null;
+        const b64 = data?.image_base64 || data?.image?.b64 || data?.data?.[0]?.b64 || data?.data?.[0]?.base64 || data?.images?.[0]?.b64 || null;
         if (b64) return Buffer.from(b64, 'base64');
         // direct URL fallback
         const directUrl = extractDirectImageUrl(str);
@@ -155,19 +164,40 @@ async function callGeminiImageAPI({ prompt }) {
     throw err;
   }
 
+  // Try a mix of Imagen endpoints and Gemini models with image generation tools
   const candidates = [
-    // Gemini 2.5 Flash (text + image tool)
-    { url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', body: (t) => ({ contents: [{ role: 'user', parts: [{ text: t }] }], tools: [{ image_generation: {} }] }) },
-    // Newer Gemini models with image_generation tool
-    { url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent', body: (t) => ({ contents: [{ role: 'user', parts: [{ text: t }] }], tools: [{ image_generation: {} }] }) },
-    { url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite-preview-02-05:generateContent', body: (t) => ({ contents: [{ role: 'user', parts: [{ text: t }] }], tools: [{ image_generation: {} }] }) },
-    // Imagen 3 endpoints (availability varies by account/region)
-    { url: 'https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateImage', body: (t) => ({ prompt: { text: t } }) },
-    { url: 'https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateImages', body: (t) => ({ prompt: { text: t } }) },
-    // Generic images endpoint observed in earlier API variants
-    { url: 'https://generativelanguage.googleapis.com/v1beta/models/images:generate', body: (t) => ({ prompt: { text: t } }) },
+    // Imagen 2 (Legacy/Stable)
     { url: 'https://generativelanguage.googleapis.com/v1beta/models/imagegeneration:generate', body: (t) => ({ prompt: { text: t } }) },
+    // Imagen 3
+    {
+      url: 'https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generateImages-001:generateImages',
+      body: (t) => ({ prompt: t, number_of_images: 1 })
+    },
+    // User specified model (Gemini 2.5 Flash - assuming it supports tool)
+    {
+      url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      body: (t) => ({ contents: [{ role: 'user', parts: [{ text: t }] }], tools: [{ google_search_retrieval: { dynamic_retrieval_config: { mode: "MODE_DYNAMIC", dynamic_threshold: 0.7 } } }] }) // 2.5 might not support image_generation tool yet, trying standard
+    },
+    // Gemini 2.0 Flash Exp (Known to support tools)
+    {
+      url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent',
+      body: (t) => ({ contents: [{ role: 'user', parts: [{ text: "Generate an image of: " + t }] }], tools: [{ google_search_retrieval: {} }] }) // actually 2.0 flash exp supports image generation via simple prompt usually, or we need to check docs. 
+      // Reverting to the tool definition that worked in some contexts or standard generation
+    },
   ];
+
+  // Correct tool payload for Gemini models that support image generation
+  const toolBody = (t) => ({
+    contents: [{ role: 'user', parts: [{ text: t }] }],
+    tools: [{ image_generation: {} }]
+  });
+
+  // Add specific candidates with tool support
+  candidates.push({ url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent', body: toolBody });
+  candidates.push({ url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', body: toolBody });
+  // Try the user's model with the tool
+  candidates.push({ url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', body: toolBody });
+
 
   let lastErr;
   for (const cand of candidates) {
@@ -177,22 +207,39 @@ async function callGeminiImageAPI({ prompt }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(cand.body(prompt)),
       });
+
       if (!res.ok) {
         const txt = await res.text().catch(() => '');
+        // console.error(`Gemini candidate ${cand.url} failed: ${res.status} ${txt}`); // Reduce noise
         lastErr = new Error(`${res.status} ${txt}`);
         continue;
       }
+
       const data = await res.json();
       let b64 = null;
-      if (Array.isArray(data?.images) && data.images[0]?.b64Data) b64 = data.images[0].b64Data;
-      if (!b64 && data?.predictions && Array.isArray(data.predictions) && data.predictions[0]?.bytesBase64Encoded) b64 = data.predictions[0].bytesBase64Encoded;
-      if (!b64 && data?.candidates && data.candidates[0]?.content?.parts) {
-        const part = data.candidates[0].content.parts.find((p) => p.inlineData?.data);
-        if (part) b64 = part.inlineData.data;
+
+      // Check for Imagen response structure
+      if (data?.images?.[0]?.image64) b64 = data.images[0].image64;
+      else if (data?.images?.[0]?.b64Data) b64 = data.images[0].b64Data;
+      else if (data?.image64) b64 = data.image64; // sometimes top level
+
+      // Check for generateContent response structure (inline data)
+      if (!b64 && data?.candidates?.[0]?.content?.parts) {
+        const parts = data.candidates[0].content.parts;
+        // Look for inline_data
+        const imgPart = parts.find(p => p.inline_data || p.inlineData);
+        if (imgPart) {
+          b64 = (imgPart.inline_data || imgPart.inlineData).data;
+        }
+        // Look for executable_code or function_call that might return image (less likely for direct gen)
       }
+
       if (b64) return Buffer.from(b64, 'base64');
+
+      // console.error(`Gemini candidate ${cand.url} returned no image data`);
       lastErr = new Error('No image data in response');
     } catch (e) {
+      // console.error(`Gemini candidate ${cand.url} exception:`, e.message);
       lastErr = e;
     }
   }
@@ -231,6 +278,10 @@ function buildProviderPipeline() {
     gemini: callGeminiImageAPI,
   };
 
+  console.log('Building provider pipeline...');
+  console.log('IMAGE_PROVIDER env:', process.env.IMAGE_PROVIDER);
+  console.log('GEMINI_API_KEY present:', Boolean(process.env.GEMINI_API_KEY));
+
   const order = [];
   const preferred = IMAGE_PROVIDER in REGISTRY ? IMAGE_PROVIDER : 'huggingface';
   if (providerHasKey(preferred)) order.push(preferred);
@@ -241,6 +292,7 @@ function buildProviderPipeline() {
   // final fallback to huggingface (guaranteed key) if nothing else was added
   if (order.length === 0) order.push('huggingface');
 
+  console.log('Provider order:', order);
   return order.map((key) => ({ key, fn: REGISTRY[key] }));
 }
 
@@ -250,7 +302,33 @@ export async function generateCustomImage(req, res) {
     if (!prompt || !category) {
       return res.status(400).json({ success: false, message: 'prompt and category are required' });
     }
-    const fullPrompt = `${prompt}. Product mockup for ${category}${subCategory ? ' • ' + subCategory : ''}. Clean studio background, centered composition.`;
+
+    // Determine context based on category/subCategory
+    let contextDescription = '';
+
+    // Normalize inputs for matching
+    const cat = category.trim();
+    const sub = (subCategory || '').trim();
+
+    // Match logic
+    if (cat.toLowerCase().includes('saree')) {
+      contextDescription = CATEGORY_CONTEXTS['Saree'];
+    } else if (cat.toLowerCase().includes('three') || sub.toLowerCase().includes('three')) {
+      contextDescription = CATEGORY_CONTEXTS['Three-Piece'];
+    } else if (cat.toLowerCase().includes('salwar') || sub.toLowerCase().includes('salwar')) {
+      contextDescription = CATEGORY_CONTEXTS['Salwar Kameez'];
+    } else if (cat.toLowerCase().includes('panjabi')) {
+      contextDescription = CATEGORY_CONTEXTS['Panjabi'];
+    } else if (cat.toLowerCase().includes('shirt')) {
+      contextDescription = CATEGORY_CONTEXTS['T-Shirt'];
+    }
+
+    // Construct full prompt
+    let fullPrompt = `${prompt}. Product mockup for ${category}${subCategory ? ' • ' + subCategory : ''}. Clean studio background, centered composition.`;
+    if (contextDescription) {
+      fullPrompt += `\n\nContext/Style: ${contextDescription}`;
+    }
+
     const providers = buildProviderPipeline();
 
     let buf = null;
@@ -263,6 +341,7 @@ export async function generateCustomImage(req, res) {
         usedProvider = provider.key;
         break;
       } catch (err) {
+        console.error(`Provider ${provider.key} failed:`, err.message);
         lastErr = err;
       }
     }

@@ -48,11 +48,15 @@ const Cart = () => {
                   />
                   <img src={p.image?.[0]} alt="" className="h-24 w-20 rounded object-cover border border-gray-200" />
                   <div className="flex-1">
-                    <Link to={`/products/${p._id}`} className="text-sm font-medium text-gray-900 hover:underline">
-                      {p.name}
-                    </Link>
+                    {p._id.startsWith('custom:') ? (
+                      <span className="text-sm font-medium text-gray-900">{p.name}</span>
+                    ) : (
+                      <Link to={`/products/${p._id}`} className="text-sm font-medium text-gray-900 hover:underline">
+                        {p.name}
+                      </Link>
+                    )}
                     <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
-                      <span>${p.price}</span>
+                      <span>৳ {p.price}</span>
                       {entry.size && <span>• Size: {entry.size}</span>}
                     </div>
                     <div className="mt-2 flex items-center gap-3">

@@ -79,10 +79,10 @@ const Login = () => {
 
   const persistSession = (token, u) => {
     if (token) {
-      try { localStorage.setItem('auth:token', token); } catch {}
+      try { localStorage.setItem('auth:token', token); } catch { }
     }
     if (u) {
-      try { localStorage.setItem('auth:user', JSON.stringify(u)); } catch {}
+      try { localStorage.setItem('auth:user', JSON.stringify(u)); } catch { }
       setUser(u);
     }
   };
@@ -127,8 +127,8 @@ const Login = () => {
   };
 
   const logout = () => {
-    try { localStorage.removeItem('auth:user'); } catch {}
-    try { localStorage.removeItem('auth:token'); } catch {}
+    try { localStorage.removeItem('auth:user'); } catch { }
+    try { localStorage.removeItem('auth:token'); } catch { }
     setUser(null);
     setMode('login');
   };
@@ -174,7 +174,7 @@ const Login = () => {
               className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-                <path fill="#EA4335" d="M12 10.2v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.7-2.6-5.7-5.7S8.9 6 12 6c1.8 0 3 .8 3.7 1.5l2.5-2.4C16.9 3.8 14.7 3 12 3 6.9 3 2.7 7.2 2.7 12.3S6.9 21.6 12 21.6c6.9 0 9.3-4.8 9.3-7.2 0-.5-.1-.9-.1-1.2H12z"/>
+                <path fill="#EA4335" d="M12 10.2v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.7-2.6-5.7-5.7S8.9 6 12 6c1.8 0 3 .8 3.7 1.5l2.5-2.4C16.9 3.8 14.7 3 12 3 6.9 3 2.7 7.2 2.7 12.3S6.9 21.6 12 21.6c6.9 0 9.3-4.8 9.3-7.2 0-.5-.1-.9-.1-1.2H12z" />
               </svg>
               Continue with Google
             </a>
@@ -212,7 +212,7 @@ const Login = () => {
               className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-                <path fill="#EA4335" d="M12 10.2v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.7-2.6-5.7-5.7S8.9 6 12 6c1.8 0 3 .8 3.7 1.5l2.5-2.4C16.9 3.8 14.7 3 12 3 6.9 3 2.7 7.2 2.7 12.3S6.9 21.6 12 21.6c6.9 0 9.3-4.8 9.3-7.2 0-.5-.1-.9-.1-1.2H12z"/>
+                <path fill="#EA4335" d="M12 10.2v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.7-2.6-5.7-5.7S8.9 6 12 6c1.8 0 3 .8 3.7 1.5l2.5-2.4C16.9 3.8 14.7 3 12 3 6.9 3 2.7 7.2 2.7 12.3S6.9 21.6 12 21.6c6.9 0 9.3-4.8 9.3-7.2 0-.5-.1-.9-.1-1.2H12z" />
               </svg>
               Continue with Google
             </a>

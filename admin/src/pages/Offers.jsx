@@ -6,7 +6,7 @@ import Promotions from './Promotions.jsx';
 
 const empty = { code: '', type: 'percent', value: 10, startAt: '', endAt: '', minSubtotal: 0, maxUses: '', perCustomerLimit: '', active: true };
 
-function CouponsTab() {
+function OffersTab() {
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(empty);
   const [loading, setLoading] = useState(false);
@@ -38,12 +38,12 @@ function CouponsTab() {
     <div className="space-y-6">
       <ToastContainer position="top-right" />
       <div>
-        <h1 className="text-2xl font-semibold">Coupons</h1>
-        <p className="text-sm text-gray-600">Create percentage or flat coupons with validity windows</p>
+        <h1 className="text-2xl font-semibold">Offers</h1>
+        <p className="text-sm text-gray-600">Create percentage or flat offers with validity windows</p>
       </div>
 
       <div className="card p-4 space-y-3">
-        <h2 className="text-sm font-semibold">New / Edit Coupon</h2>
+        <h2 className="text-sm font-semibold">New / Edit Offer</h2>
         <div className="grid md:grid-cols-6 gap-2">
           <input className="input" placeholder="CODE" value={form.code} onChange={(e) => setForm((f) => ({ ...f, code: e.target.value.toUpperCase() }))} />
           <select className="input" value={form.type} onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}>
@@ -59,7 +59,7 @@ function CouponsTab() {
           <label className="inline-flex items-center gap-2"><input type="checkbox" checked={!!form.active} onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))} /> Active</label>
         </div>
         <div>
-          <button className="btn-primary" onClick={save}>{form._id ? 'Update' : 'Create'} Coupon</button>
+          <button className="btn-primary" onClick={save}>{form._id ? 'Update' : 'Create'} Offer</button>
           {form._id && <button className="btn-outline ml-2" onClick={() => setForm(empty)}>Cancel Edit</button>}
         </div>
       </div>
@@ -90,33 +90,33 @@ function CouponsTab() {
   );
 }
 
-export default function Coupons() {
-  const [tab, setTab] = useState('coupons');
+export default function Offers() {
+  const [tab, setTab] = useState('offers');
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-6 border-b border-gray-200">
         <button
-          onClick={() => setTab('coupons')}
-          className={`pb-3 text-sm font-medium transition-colors ${tab === 'coupons'
-              ? 'border-b-2 border-black text-black'
-              : 'text-gray-500 hover:text-gray-700'
+          onClick={() => setTab('offers')}
+          className={`pb-3 text-sm font-medium transition-colors ${tab === 'offers'
+            ? 'border-b-2 border-black text-black'
+            : 'text-gray-500 hover:text-gray-700'
             }`}
         >
-          Coupons
+          Offers
         </button>
         <button
           onClick={() => setTab('promotions')}
           className={`pb-3 text-sm font-medium transition-colors ${tab === 'promotions'
-              ? 'border-b-2 border-black text-black'
-              : 'text-gray-500 hover:text-gray-700'
+            ? 'border-b-2 border-black text-black'
+            : 'text-gray-500 hover:text-gray-700'
             }`}
         >
           Promotions
         </button>
       </div>
 
-      {tab === 'coupons' ? <CouponsTab /> : <Promotions />}
+      {tab === 'offers' ? <OffersTab /> : <Promotions />}
     </div>
   );
 }

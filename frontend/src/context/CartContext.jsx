@@ -37,6 +37,14 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const removeItems = (keys) => {
+    setItems((prev) => {
+      const next = { ...prev };
+      keys.forEach((k) => delete next[k]);
+      return next;
+    });
+  };
+
   const clearCart = () => setItems({});
 
   const updateQty = (key, qty) => {
@@ -67,7 +75,7 @@ export const CartProvider = ({ children }) => {
   const cartCount = useMemo(() => Object.values(items).reduce((sum, it) => sum + (it.qty || 0), 0), [items]);
 
   const value = useMemo(
-    () => ({ items, addToCart, removeFromCart, clearCart, updateQty, updateSize, cartCount }),
+    () => ({ items, addToCart, removeFromCart, removeItems, clearCart, updateQty, updateSize, cartCount }),
     [items, cartCount]
   );
 
