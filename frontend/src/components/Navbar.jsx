@@ -103,7 +103,7 @@ const Navbar = () => {
             >
               <img src={assets.search_icon} alt="Search" className="h-5 w-5" />
             </button>
-            <Link to="/cart" className="relative inline-flex p-2 rounded-md hover:bg-gray-100" aria-label="Cart" onClick={closeMobile}>
+            <Link to="/cart" className="relative hidden md:inline-flex p-2 rounded-md hover:bg-gray-100" aria-label="Cart" onClick={closeMobile}>
               <img src={assets.cart_icon} alt="Cart" className="h-5 w-5" />
               {/* Badge placeholder; wire to cart count later */}
               <span className="absolute -top-1.5 -right-1.5 h-4 min-w-[1rem] px-1 rounded-full bg-black text-white text-[10px] leading-4 text-center">
@@ -112,7 +112,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/login"
-              className="inline-flex p-2 rounded-md hover:bg-gray-100"
+              className="hidden md:inline-flex p-2 rounded-md hover:bg-gray-100"
               aria-label="Profile"
               onClick={closeMobile}
             >
