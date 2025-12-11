@@ -9,9 +9,6 @@ const ProductCard = ({ product }) => {
 
   const imgs = product.image || [];
   const first = imgs[0];
-  const second = imgs[1];
-  // Avoid hover swap flash by waiting until the second image is loaded
-  const [secondLoaded, setSecondLoaded] = useState(!(second && second !== first));
 
   const onAdd = (e) => {
     e.preventDefault();
@@ -20,7 +17,7 @@ const ProductCard = ({ product }) => {
 
   // 3D tilt effect
   const ref = useRef(null);
-  const [tilt, setTilt] = useState({ transform: 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)' });
+  const [tilt, setTilt] = useState({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)' });
 
   const onMove = (e) => {
     const el = ref.current;
@@ -28,54 +25,51 @@ const ProductCard = ({ product }) => {
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const px = x / rect.width - 0.5; // -0.5 .. 0.5
+    const px = x / rect.width - 0.5;
     const py = y / rect.height - 0.5;
-    const max = 10; // max tilt degrees
-    const rx = (-py * max).toFixed(2);
-    const ry = (px * max).toFixed(2);
-    setTilt({ transform: `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)` });
+
+    // Subtle tilt
+    const rx = (-py * 8).toFixed(2);
+    const ry = (px * 8).toFixed(2);
+
+    setTilt({
+      transform: `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`,
+      transition: 'none'
+    });
   };
 
   const onLeave = () => {
-    setTilt({ transform: 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)' });
+    setTilt({
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)',
+      transition: 'transform 0.5s ease-out'
+    });
   };
 
   return (
-    <Link to={`/products/${product._id}`} className="group block">
+    <Link to={`/products/${product._id}`} className="group relative block h-full">
       <div
         ref={ref}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
-        className="transform-gpu transition-transform duration-150 ease-out will-change-transform"
         style={tilt}
+        className="relative h-full transition-all duration-200 ease-out transform-gpu"
       >
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-white shadow-sm border border-gray-200">
+        <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100 rounded-xl shadow-md group-hover:shadow-2xl transition-shadow duration-300">
           <img
             src={first}
             alt={product.name}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300${secondLoaded ? ' group-hover:opacity-0' : ''}`}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
             loading="lazy"
-            decoding="async"
           />
-          <img
-            src={second || first}
-            alt={product.name}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 opacity-0${secondLoaded ? ' group-hover:opacity-100' : ''}`}
-            loading="lazy"
-            decoding="async"
-            onLoad={() => setSecondLoaded(true)}
-          />
-        </div>
-        <div className="mt-2">
-          <p className="text-sm font-medium text-gray-900 line-clamp-1">{product.name}</p>
-          <p className="text-sm text-gray-600">৳ {product.price}</p>
         </div>
 
-        <div className="mt-3 grid grid-cols-1 gap-2">
+        <div className="mt-4 space-y-2 text-center transform transition-transform duration-300 group-hover:translate-y-1">
+          <h3 className="text-sm font-medium text-gray-900 group-hover:text-gray-600 transition-colors font-serif tracking-wide">{product.name}</h3>
+          <p className="text-xs font-bold text-gray-500 tracking-wider">৳ {product.price}</p>
+
           <button
-            type="button"
             onClick={onAdd}
-            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100"
+            className="w-full mt-2 py-2 border border-gray-200 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white hover:border-black transition-colors rounded-md"
           >
             Add to Cart
           </button>

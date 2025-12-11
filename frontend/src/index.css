@@ -6,7 +6,10 @@
 @tailwind utilities;
 
 @layer base {
-  html { @apply font-sans; }
+  html {
+    @apply font-sans;
+  }
+
   :root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -15,7 +18,9 @@
 
 /* Brand font: elegant but readable */
 @layer utilities {
-  .font-brand { font-family: 'Playfair Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; }
+  .font-brand {
+    font-family: 'Playfair Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
 }
 
 /* Sparkles background (approximation of aceternity sparkles) */
@@ -24,26 +29,36 @@
     position: relative;
     display: inline-block;
   }
+
   .sparkles::before {
     content: "";
     position: absolute;
     inset: -6px;
     border-radius: 9999px;
     background-image:
-      radial-gradient(6px 6px at 20px 30px, rgba(255,255,255,0.7) 40%, transparent 41%),
-      radial-gradient(4px 4px at 80px 40px, rgba(99,102,241,0.7) 40%, transparent 41%),
-      radial-gradient(5px 5px at 140px 20px, rgba(236,72,153,0.7) 40%, transparent 41%),
-      radial-gradient(3px 3px at 60px 90px, rgba(34,197,94,0.7) 40%, transparent 41%),
-      radial-gradient(4px 4px at 120px 80px, rgba(56,189,248,0.7) 40%, transparent 41%);
+      radial-gradient(6px 6px at 20px 30px, rgba(255, 255, 255, 0.7) 40%, transparent 41%),
+      radial-gradient(4px 4px at 80px 40px, rgba(99, 102, 241, 0.7) 40%, transparent 41%),
+      radial-gradient(5px 5px at 140px 20px, rgba(236, 72, 153, 0.7) 40%, transparent 41%),
+      radial-gradient(3px 3px at 60px 90px, rgba(34, 197, 94, 0.7) 40%, transparent 41%),
+      radial-gradient(4px 4px at 120px 80px, rgba(56, 189, 248, 0.7) 40%, transparent 41%);
     background-repeat: no-repeat;
     filter: blur(0.3px);
     animation: sparkle-move 6s linear infinite;
     opacity: .85;
     pointer-events: none;
   }
+
   @keyframes sparkle-move {
-    0% { transform: translate3d(0,0,0); }
-    50% { transform: translate3d(3px,-3px,0); }
-    100% { transform: translate3d(0,0,0); }
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+      transform: translate3d(3px, -3px, 0);
+    }
+
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
   }
 }

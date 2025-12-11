@@ -15,7 +15,7 @@ export function SparklesLogo({ textColor = "text-black", particleColor = "#00000
                     particleColor={particleColor}
                 />
             </div>
-            <h1 className={`md:text-xl text-lg font-bold italic font-sans text-center ${textColor} relative z-20 tracking-wider`}>
+            <h1 className={`md:text-2xl text-xl font-bold font-brand text-center ${textColor} relative z-20 tracking-wide whitespace-nowrap`}>
                 HK Signature
             </h1>
         </div>
