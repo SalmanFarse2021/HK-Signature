@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
+import { toast } from 'react-toastify';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
@@ -10,9 +11,13 @@ const ProductCard = ({ product }) => {
   const imgs = product.image || [];
   const first = imgs[0];
 
+  const [isAdded, setIsAdded] = useState(false);
+
   const onAdd = (e) => {
     e.preventDefault();
     addToCart(product, 1);
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
   };
 
   // 3D tilt effect
@@ -69,9 +74,13 @@ const ProductCard = ({ product }) => {
 
           <button
             onClick={onAdd}
-            className="w-full mt-2 py-2 border border-gray-200 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white hover:border-black transition-colors rounded-md"
+            disabled={isAdded}
+            className={`w-full mt-2 py-2 border text-xs font-bold uppercase tracking-widest transition-colors rounded-md ${isAdded
+                ? 'bg-green-600 text-white border-green-600'
+                : 'border-gray-200 hover:bg-black hover:text-white hover:border-black'
+              }`}
           >
-            Add to Cart
+            {isAdded ? 'Added to cart!' : 'Add to Cart'}
           </button>
         </div>
       </div>

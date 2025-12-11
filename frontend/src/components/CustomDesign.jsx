@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { apiUrl } from '../api/client.js';
 import { useCart } from '../context/CartContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const CATEGORIES = {
   Men: ['Shirt', 'T-Shirt', 'Pants', 'Hoodie', 'Jacket'],
@@ -71,6 +72,7 @@ export default function CustomDesign() {
       sizes: SIZES,
     };
     addToCart(product, 1, { size });
+    toast.success('Custom design added to cart!');
     navigate('/cart');
   };
 

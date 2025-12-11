@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import { assets } from '../assets/assets.js';
 import { useProducts } from '../context/ProductsContext.jsx';
@@ -85,10 +86,13 @@ const Product = () => {
     : null;
   const displayRating = communityAvg || meta.rating;
 
+  const [isAdded, setIsAdded] = useState(false);
+
   const onAdd = () => {
     addToCart(product, Math.max(1, qty | 0), { size: size || undefined });
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
   };
-
 
   const more = useMemo(() => products.filter((p) => p._id !== product._id).slice(0, 4), [product._id, products]);
 
@@ -194,9 +198,13 @@ const Product = () => {
               <button
                 type="button"
                 onClick={onAdd}
-                className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                disabled={isAdded}
+                className={`inline-flex items-center justify-center rounded-md border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${isAdded
+                    ? 'bg-green-600 text-white border-green-600 hover:bg-green-700'
+                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-100'
+                  }`}
               >
-                Add to Cart
+                {isAdded ? 'Added to cart!' : 'Add to Cart'}
               </button>
               <button
                 type="button"
