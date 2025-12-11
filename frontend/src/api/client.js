@@ -5,13 +5,32 @@ const API_BASE = (typeof window !== 'undefined' && window.location?.protocol ===
   : RAW_BASE;
 
 function baseOrigin() {
-  if (API_BASE) return API_BASE;
+  if (API_BASE) {
+    // Smart replacement for mobile testing:
+    // If we are on a LAN IP (not localhost), and the base is localhost, try to use the window's hostname with the base's port.
+    if (typeof window !== 'undefined' && window.location?.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      try {
+        const u = new URL(API_BASE);
+        if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') {
+          u.hostname = window.location.hostname;
+          return u.toString().replace(/\/$/, '');
+        }
+      } catch { }
+    }
+    return API_BASE;
+  }
   if (typeof window !== 'undefined' && window.location?.origin) return window.location.origin;
   return 'http://localhost:5001';
 }
 
 export function apiUrl(path) {
-  return new URL(path, baseOrigin()).toString();
+  try {
+    const base = baseOrigin();
+    return new URL(path, base).toString();
+  } catch (e) {
+    // Fallback to relative path if URL construction fails (e.g. invalid base)
+    return path;
+  }
 }
 export const BASE_URL = API_BASE || baseOrigin();
 
