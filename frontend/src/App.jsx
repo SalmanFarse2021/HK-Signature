@@ -13,8 +13,11 @@ import PlaceOrder from './pages/PlaceOrder.jsx';
 import Product from './pages/Product.jsx';
 import MyProfile from './pages/MyProfile.jsx';
 
+import ScrollToTop from './components/ScrollToTop.jsx';
+
 const App = () => (
   <div className="min-h-screen bg-white flex flex-col">
+    <ScrollToTop />
     <Navbar />
     <SearchOverlay />
     <main className="flex-1 bg-white">
