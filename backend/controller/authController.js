@@ -15,26 +15,16 @@ const BACKEND_BASE = process.env.BACKEND_BASE_URL || `http://localhost:${SERVER_
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || `${BACKEND_BASE}/api/auth/google/callback`;
 const FRONTEND_URL = process.env.FRONTEND_URL || process.env.CLIENT_URL || 'http://localhost:5173';
 
-// Simple in-memory state store with TTL (5 minutes)
-const stateStore = new Map(); // state -> expiresAt
-const STATE_TTL_MS = 5 * 60 * 1000;
-
+// Stateless state management (to survive server restarts in dev)
 function createState(payload) {
-  const rand = crypto.randomBytes(16).toString('hex');
-  const data = { s: rand, r: payload?.r || '/' };
-  const encoded = Buffer.from(JSON.stringify(data)).toString('base64url');
-  stateStore.set(rand, Date.now() + STATE_TTL_MS);
-  return encoded;
+  const data = { r: payload?.r || '/', nonce: crypto.randomBytes(8).toString('hex') };
+  return Buffer.from(JSON.stringify(data)).toString('base64url');
 }
 
 function consumeState(encoded) {
   try {
     const data = JSON.parse(Buffer.from(encoded, 'base64url').toString('utf8'));
-    if (!data || !data.s) return null;
-    const exp = stateStore.get(data.s);
-    if (!exp || exp < Date.now()) return null;
-    stateStore.delete(data.s);
-    return data; // { s, r }
+    return data; // { r, nonce }
   } catch (_) {
     return null;
   }

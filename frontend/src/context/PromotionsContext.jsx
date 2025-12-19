@@ -3,7 +3,7 @@ import { fetchPromotions } from '../api/client.js';
 
 const PromotionsContext = createContext(null);
 
-export function PromotionsProvider({ children }) {
+export default function PromotionsProvider({ children }) {
   const [promotions, setPromotions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

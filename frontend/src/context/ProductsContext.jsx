@@ -24,7 +24,7 @@ function mapApiProduct(p) {
   };
 }
 
-export function ProductsProvider({ children }) {
+export default function ProductsProvider({ children }) {
   const [apiProducts, setApiProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -58,19 +58,21 @@ export function ProductsProvider({ children }) {
     return Array.from(byId.values());
   }, [apiProducts]);
 
-  const value = useMemo(() => ({ products: merged, loading, error, refresh: async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await listProducts({ limit: 200 });
-      const arr = (data?.products || []).map(mapApiProduct);
-      setApiProducts(arr);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
+  const value = useMemo(() => ({
+    products: merged, loading, error, refresh: async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await listProducts({ limit: 200 });
+        const arr = (data?.products || []).map(mapApiProduct);
+        setApiProducts(arr);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     }
-  } }), [merged, loading, error]);
+  }), [merged, loading, error]);
 
   return <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>;
 }

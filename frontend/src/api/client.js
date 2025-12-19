@@ -1,4 +1,4 @@
-const RAW_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
+const RAW_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 // If the site is served over HTTPS and the API base is HTTP, prefer same-origin + dev proxy
 const API_BASE = (typeof window !== 'undefined' && window.location?.protocol === 'https:' && RAW_BASE.startsWith('http:'))
   ? ''
@@ -20,7 +20,7 @@ function baseOrigin() {
     return API_BASE;
   }
   if (typeof window !== 'undefined' && window.location?.origin) return window.location.origin;
-  return 'http://localhost:5001';
+  return 'http://localhost:4000';
 }
 
 export function apiUrl(path) {
