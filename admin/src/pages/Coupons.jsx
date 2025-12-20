@@ -9,11 +9,10 @@ const empty = { code: '', type: 'percent', value: 10, startAt: '', endAt: '', mi
 function CouponsTab() {
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(empty);
-  const [loading, setLoading] = useState(false);
+
 
   async function load() {
-    setLoading(true);
-    try { const res = await listCoupons(); setItems(res?.coupons || []); } catch { toast.error('Failed to load'); } finally { setLoading(false); }
+    try { const res = await listCoupons(); setItems(res?.coupons || []); } catch { toast.error('Failed to load'); }
   }
   useEffect(() => { load(); }, []);
 
@@ -74,7 +73,7 @@ function CouponsTab() {
                 <td className="p-2">{c.type}</td>
                 <td className="p-2">{c.value}</td>
                 <td className="p-2">{c.startAt ? new Date(c.startAt).toLocaleDateString() : '—'} → {c.endAt ? new Date(c.endAt).toLocaleDateString() : '—'}</td>
-                <td className="p-2">${c.minSubtotal || 0}</td>
+                <td className="p-2">৳{c.minSubtotal || 0}</td>
                 <td className="p-2">{c.usedCount || 0}{c.maxUses ? `/` + c.maxUses : ''}</td>
                 <td className="p-2">{c.active ? 'Yes' : 'No'}</td>
                 <td className="p-2 text-right space-x-2">
@@ -99,8 +98,8 @@ export default function Coupons() {
         <button
           onClick={() => setTab('coupons')}
           className={`pb-3 text-sm font-medium transition-colors ${tab === 'coupons'
-              ? 'border-b-2 border-black text-black'
-              : 'text-gray-500 hover:text-gray-700'
+            ? 'border-b-2 border-black text-black'
+            : 'text-gray-500 hover:text-gray-700'
             }`}
         >
           Coupons
@@ -108,8 +107,8 @@ export default function Coupons() {
         <button
           onClick={() => setTab('promotions')}
           className={`pb-3 text-sm font-medium transition-colors ${tab === 'promotions'
-              ? 'border-b-2 border-black text-black'
-              : 'text-gray-500 hover:text-gray-700'
+            ? 'border-b-2 border-black text-black'
+            : 'text-gray-500 hover:text-gray-700'
             }`}
         >
           Promotions

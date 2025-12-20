@@ -9,7 +9,6 @@ import Banners from './pages/Banners.jsx';
 import Posts from './pages/Posts.jsx';
 import Pages from './pages/Pages.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-import { useAuth } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 
 const Shell = ({ children }) => <Layout>{children}</Layout>;
@@ -17,10 +16,15 @@ const Shell = ({ children }) => <Layout>{children}</Layout>;
 import { useEffect, useState } from 'react';
 import { listProducts as apiListProducts, getDashboard } from './api/client.js';
 
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
+
 function Dashboard() {
   const [count, setCount] = useState(null);
   const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState(null);
+
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -39,45 +43,140 @@ function Dashboard() {
     })();
   }, []);
 
+  const data = [
+    { name: 'Mon', sales: 4000, revenue: 2400 },
+    { name: 'Tue', sales: 3000, revenue: 1398 },
+    { name: 'Wed', sales: 2000, revenue: 9800 },
+    { name: 'Thu', sales: 2780, revenue: 3908 },
+    { name: 'Fri', sales: 1890, revenue: 4800 },
+    { name: 'Sat', sales: 2390, revenue: 3800 },
+    { name: 'Sun', sales: 3490, revenue: 4300 },
+  ];
+
+  const container = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="space-y-8">
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">Overview</h1>
         <p className="text-gray-500 mt-2 text-lg">Welcome back, here's what's happening today.</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div className="card p-6 flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
-          <div className="text-xs font-bold uppercase tracking-wider text-gray-400">Total Products</div>
-          <div className="text-4xl font-bold text-gray-900">{loading ? '...' : (count ?? '—')}</div>
-        </div>
-        <div className="card p-6 flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
-          <div className="text-xs font-bold uppercase tracking-wider text-gray-400">Total Sales</div>
-          <div className="text-4xl font-bold text-gray-900">${metrics?.salesSummary?.totalSales?.toFixed?.(0) || '—'}</div>
-        </div>
-        <div className="card p-6 flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
-          <div className="text-xs font-bold uppercase tracking-wider text-gray-400">Today's Revenue</div>
-          <div className="text-4xl font-bold text-gray-900">${metrics?.salesSummary?.todaySales?.toFixed?.(0) || '—'}</div>
-        </div>
-        <div className="card p-6 flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
-          <div className="text-xs font-bold uppercase tracking-wider text-gray-400">Avg. Order</div>
-          <div className="text-4xl font-bold text-gray-900">${metrics?.salesSummary?.averageOrderValue?.toFixed?.(0) || '—'}</div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <motion.div variants={item} className="card-premium p-5 group">
+          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <svg className="w-24 h-24 text-indigo-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+          </div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-indigo-50/80 text-indigo-600 shadow-sm border border-indigo-100">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+              </div>
+              <span className="text-xs font-bold px-2 py-1 rounded-full bg-green-100 text-green-700">+12%</span>
+            </div>
+            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">{loading ? '...' : (count ?? '—')}</div>
+            <div className="text-sm font-medium text-gray-500">Total Products</div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={item} className="card-premium p-5 group">
+          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <svg className="w-24 h-24 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-emerald-50/80 text-emerald-600 shadow-sm border border-emerald-100">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.totalSales?.toFixed?.(0) || '—'}</div>
+            <div className="text-sm font-medium text-gray-500">Total Sales</div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={item} className="card-premium p-5 group">
+          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <svg className="w-24 h-24 text-violet-600" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          </div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-violet-50/80 text-violet-600 shadow-sm border border-violet-100">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.todaySales?.toFixed?.(0) || '—'}</div>
+            <div className="text-sm font-medium text-gray-500">Today's Revenue</div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={item} className="card-premium p-5 group">
+          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <svg className="w-24 h-24 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          </div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-2xl bg-amber-50/80 text-amber-600 shadow-sm border border-amber-100">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.averageOrderValue?.toFixed?.(0) || '—'}</div>
+            <div className="text-sm font-medium text-gray-500">Avg. Order Value</div>
+          </div>
+        </motion.div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Orders Overview */}
-        <div className="card p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Orders Status</h2>
-            <Link to="/orders" className="text-sm font-medium text-black hover:underline">View Details</Link>
+        <motion.div variants={item} className="card p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-gray-900 mb-6">Revenue Analytics</h2>
+          <div className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} dx={-10} />
+                <Tooltip
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+                  cursor={{ stroke: '#ddd', strokeWidth: 1 }}
+                />
+                <Area type="monotone" dataKey="revenue" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
+        </motion.div>
+
+        <motion.div variants={item} className="card p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-6">Orders Status</h2>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-gray-600 font-medium">Total Orders</span>
-              <span className="font-bold text-xl">{metrics?.salesSummary?.orderCount ?? '—'}</span>
+            <div className="h-[200px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={[
+                  { name: 'Pending', value: metrics?.ordersOverview?.pending ?? 0, fill: '#d97706' },
+                  { name: 'Processing', value: metrics?.ordersOverview?.processing ?? 0, fill: '#2563eb' },
+                  { name: 'Shipped', value: metrics?.ordersOverview?.shipped ?? 0, fill: '#4f46e5' },
+                  { name: 'Delivered', value: metrics?.ordersOverview?.delivered ?? 0, fill: '#059669' },
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                  <XAxis dataKey="name" hide />
+                  <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '8px' }} />
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 mt-4">
               <div className="p-3 border border-gray-100 rounded-lg">
                 <div className="text-xs text-gray-500 uppercase mb-1">Pending</div>
                 <div className="font-bold text-lg text-amber-600">{metrics?.ordersOverview?.pending ?? 0}</div>
@@ -96,10 +195,12 @@ function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
+      </div>
 
+      <div className="grid lg:grid-cols-3 gap-8">
         {/* Top Products */}
-        <div className="card p-6">
+        <motion.div variants={item} className="card p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-6">Top Performing Products</h2>
           <ul className="space-y-4">
             {(metrics?.topProducts || []).map((p, i) => (
@@ -115,66 +216,17 @@ function Dashboard() {
             ))}
             {(!metrics?.topProducts || metrics.topProducts.length === 0) && <li className="text-gray-500 text-sm italic">No data available yet.</li>}
           </ul>
-        </div>
-
-        {/* Customer Insights */}
-        <div className="card p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Customer Insights</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-gray-50 rounded-xl text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">{metrics?.customerInsights?.totalCustomers ?? '—'}</div>
-              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Customers</div>
-            </div>
-            <div className="p-4 bg-gray-50 rounded-xl text-center">
-              <div className="text-3xl font-bold text-emerald-600 mb-1">+{metrics?.customerInsights?.newCustomers ?? '0'}</div>
-              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">New (30d)</div>
-            </div>
-          </div>
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">Returning Customers</span>
-              <span className="font-bold">{metrics?.customerInsights?.returningCustomers ?? '—'}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Monthly Revenue</span>
-              <span className="font-bold text-green-600">${metrics?.salesSummary?.monthlyRevenue?.toFixed?.(0) || '—'}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Low Stock */}
-        <div className="card p-6 lg:col-span-1">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-            Low Stock Alerts
-          </h2>
-          <div className="overflow-hidden">
-            <ul className="divide-y divide-gray-100">
-              {(metrics?.lowStock || []).map((p) => (
-                <li key={p.id} className="py-3 flex items-center gap-4">
-                  {p.image ? <img src={p.image} className="h-10 w-10 rounded-lg object-cover border border-gray-200" /> : <div className="h-10 w-10 rounded-lg bg-gray-100" />}
-                  <div className="flex-1 min-w-0">
-                    <div className="truncate text-sm font-medium text-gray-900">{p.name}</div>
-                    <div className="text-xs text-rose-600 font-medium">{p.stock} remaining</div>
-                  </div>
-                </li>
-              ))}
-              {(!metrics?.lowStock || metrics.lowStock.length === 0) && <li className="py-4 text-gray-500 text-sm">All products are well stocked.</li>}
-            </ul>
-          </div>
-        </div>
+        </motion.div>
 
         {/* Recent Orders Table */}
-        <div className="card p-0 lg:col-span-2 overflow-hidden flex flex-col">
+        <motion.div variants={item} className="card p-0 lg:col-span-2 overflow-hidden flex flex-col">
           <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white">
             <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
             <Link to="/orders" className="btn btn-outline py-1.5 px-3 text-xs">View All Orders</Link>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs text-gray-500 uppercase bg-gray-50/50 border-b border-gray-100">
+            <table className="table-premium">
+              <thead>
                 <tr>
                   <th className="px-6 py-3 font-medium">Order ID</th>
                   <th className="px-6 py-3 font-medium">Customer</th>
@@ -188,7 +240,7 @@ function Dashboard() {
                   <tr key={o._id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4 font-medium text-gray-900">#{o.orderNumber}</td>
                     <td className="px-6 py-4 text-gray-600">{o.customerEmail || 'Guest'}</td>
-                    <td className="px-6 py-4 font-medium text-gray-900">${(o.total || 0).toFixed(2)}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">৳{(o.total || 0).toFixed(2)}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
                         ${o.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}
@@ -205,9 +257,9 @@ function Dashboard() {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

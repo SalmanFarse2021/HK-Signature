@@ -76,8 +76,8 @@ const ProductCard = ({ product }) => {
             onClick={onAdd}
             disabled={isAdded}
             className={`w-full mt-2 py-2 border text-xs font-bold uppercase tracking-widest transition-colors rounded-md ${isAdded
-                ? 'bg-green-600 text-white border-green-600'
-                : 'border-gray-200 hover:bg-black hover:text-white hover:border-black'
+              ? 'bg-green-600 text-white border-green-600'
+              : 'border-gray-200 hover:bg-black hover:text-white hover:border-black'
               }`}
           >
             {isAdded ? 'Added to cart!' : 'Add to Cart'}

@@ -33,7 +33,7 @@ export default function OrderDetail() {
     }
   }
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [id]);
+  useEffect(() => { load(); }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function onSave(e) {
     e.preventDefault();
@@ -170,8 +170,8 @@ export default function OrderDetail() {
         <div className="bg-white/80 backdrop-blur border rounded-xl p-4 shadow-sm">
           <h3 className="text-sm font-semibold">Invoice & Label</h3>
           <div className="mt-2 flex gap-2">
-            <button onClick={async () => { try { const res = await downloadInvoice(id); const blob = new Blob([res.data], { type: 'application/pdf' }); const url = URL.createObjectURL(blob); window.open(url, '_blank'); } catch (e) { toast.error('Failed to download'); } }} className="px-3 py-2 border rounded">Invoice PDF</button>
-            <button onClick={async () => { try { const res = await downloadLabel(id); const blob = new Blob([res.data], { type: 'application/pdf' }); const url = URL.createObjectURL(blob); window.open(url, '_blank'); } catch (e) { toast.error('Failed to download'); } }} className="px-3 py-2 border rounded">Shipping Label</button>
+            <button onClick={async () => { try { const res = await downloadInvoice(id); const blob = new Blob([res.data], { type: 'application/pdf' }); const url = URL.createObjectURL(blob); window.open(url, '_blank'); } catch { toast.error('Failed to download'); } }} className="px-3 py-2 border rounded">Invoice PDF</button>
+            <button onClick={async () => { try { const res = await downloadLabel(id); const blob = new Blob([res.data], { type: 'application/pdf' }); const url = URL.createObjectURL(blob); window.open(url, '_blank'); } catch { toast.error('Failed to download'); } }} className="px-3 py-2 border rounded">Shipping Label</button>
           </div>
         </div>
         <div className="bg-white/80 backdrop-blur border rounded-xl p-4 shadow-sm">
@@ -185,14 +185,14 @@ export default function OrderDetail() {
             <label className="block">Amount
               <input className="mt-1 w-full border rounded px-3 py-2" type="number" step="0.01" value={refund.amount} onChange={(e) => setRefund((r) => ({ ...r, amount: e.target.value }))} />
             </label>
-            <button type="button" className="px-3 py-2 bg-black text-white rounded col-span-2" onClick={async () => { try { await updateRefund(id, refund); toast.success('Refund updated'); load(); } catch (e) { toast.error('Failed'); } }}>Save Refund</button>
+            <button type="button" className="px-3 py-2 bg-black text-white rounded col-span-2" onClick={async () => { try { await updateRefund(id, refund); toast.success('Refund updated'); load(); } catch { toast.error('Failed'); } }}>Save Refund</button>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
             <label className="inline-flex items-center gap-2 col-span-2"><input type="checkbox" checked={retReq.requested} onChange={(e) => setRetReq((r) => ({ ...r, requested: e.target.checked }))} /> Return requested</label>
             <label className="col-span-2">Reason
               <input className="mt-1 w-full border rounded px-3 py-2" value={retReq.reason} onChange={(e) => setRetReq((r) => ({ ...r, reason: e.target.value }))} />
             </label>
-            <button type="button" className="px-3 py-2 bg-black text-white rounded col-span-2" onClick={async () => { try { await updateReturn(id, retReq); toast.success('Return updated'); load(); } catch (e) { toast.error('Failed'); } }}>Save Return</button>
+            <button type="button" className="px-3 py-2 bg-black text-white rounded col-span-2" onClick={async () => { try { await updateReturn(id, retReq); toast.success('Return updated'); load(); } catch { toast.error('Failed'); } }}>Save Return</button>
           </div>
         </div>
       </div>

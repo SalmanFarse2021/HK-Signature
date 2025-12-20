@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { listPagesApi, savePageApi } from '../api/client.js';
 
 const presets = [
@@ -30,7 +30,7 @@ export default function Pages() {
     const payload = { ...form };
     const res = await savePageApi(payload);
     await load();
-    if (res?.page?._id) setForm((f)=> ({ ...f, _id: res.page._id }));
+    if (res?.page?._id) setForm((f) => ({ ...f, _id: res.page._id }));
   };
 
   return (
@@ -41,22 +41,22 @@ export default function Pages() {
       </div>
       <div className="flex items-center gap-3">
         {presets.map((p) => (
-          <button key={p.key} className={`tab ${activeKey === p.key ? 'tab-active' : ''}`} onClick={()=> setActiveKey(p.key)}>{p.title}</button>
+          <button key={p.key} className={`tab ${activeKey === p.key ? 'tab-active' : ''}`} onClick={() => setActiveKey(p.key)}>{p.title}</button>
         ))}
       </div>
       <form onSubmit={onSubmit} className="card p-4 space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label className="label">Title</label>
-            <input className="input" value={form.title} onChange={(e)=> setForm({ ...form, title: e.target.value })} />
+            <input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
           </div>
           <div className="flex items-center gap-2 mt-6">
-            <input id="published" type="checkbox" checked={!!form.published} onChange={(e)=> setForm({ ...form, published: e.target.checked })} />
+            <input id="published" type="checkbox" checked={!!form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} />
             <label htmlFor="published">Published</label>
           </div>
           <div className="md:col-span-2">
             <label className="label">Content (HTML/Markdown)</label>
-            <textarea rows={10} className="textarea" value={form.content} onChange={(e)=> setForm({ ...form, content: e.target.value })} />
+            <textarea rows={10} className="textarea" value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} />
           </div>
         </div>
         <div>

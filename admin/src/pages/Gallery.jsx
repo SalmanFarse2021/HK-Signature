@@ -15,7 +15,7 @@ export default function Gallery() {
       setItems(res.media || []);
     } finally { setLoading(false); }
   };
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [filter]);
+  useEffect(() => { load(); }, [filter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const upload = async (e) => {
     e.preventDefault();
@@ -40,12 +40,12 @@ export default function Gallery() {
 
       <form onSubmit={upload} className="card p-4 space-y-3">
         <div className="flex items-center gap-3">
-          <select className="input !w-auto" value={filter} onChange={(e)=> setFilter(e.target.value)}>
+          <select className="input !w-auto" value={filter} onChange={(e) => setFilter(e.target.value)}>
             <option value="all">All</option>
             <option value="image">Images</option>
             <option value="video">Videos</option>
           </select>
-          <input type="file" multiple accept="image/*,video/*" onChange={(e)=> setFiles(e.target.files)} />
+          <input type="file" multiple accept="image/*,video/*" onChange={(e) => setFiles(e.target.files)} />
           <button className="btn-primary">Upload</button>
         </div>
       </form>
@@ -61,7 +61,7 @@ export default function Gallery() {
               )}
               <div className="flex items-center justify-between text-xs">
                 <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline truncate">Open</a>
-                <button className="btn-danger !px-2 !py-1" onClick={()=> del(m._id)}>Delete</button>
+                <button className="btn-danger !px-2 !py-1" onClick={() => del(m._id)}>Delete</button>
               </div>
             </div>
           ))}

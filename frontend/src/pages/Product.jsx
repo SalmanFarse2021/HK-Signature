@@ -200,8 +200,8 @@ const Product = () => {
                 onClick={onAdd}
                 disabled={isAdded}
                 className={`inline-flex items-center justify-center rounded-md border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${isAdded
-                    ? 'bg-green-600 text-white border-green-600 hover:bg-green-700'
-                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-green-600 text-white border-green-600 hover:bg-green-700'
+                  : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-100'
                   }`}
               >
                 {isAdded ? 'Added to cart!' : 'Add to Cart'}
