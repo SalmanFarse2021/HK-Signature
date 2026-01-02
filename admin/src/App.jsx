@@ -71,64 +71,67 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <motion.div variants={item} className="card-premium p-5 group">
-          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-            <svg className="w-24 h-24 text-indigo-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-          </div>
+        <motion.div variants={item} className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white to-indigo-50/50 border border-indigo-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-2xl bg-indigo-50/80 text-indigo-600 shadow-sm border border-indigo-100">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+              <div className="p-3 rounded-2xl bg-indigo-100/50 text-indigo-600 ring-1 ring-indigo-50 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
               </div>
-              <span className="text-xs font-bold px-2 py-1 rounded-full bg-green-100 text-green-700">+12%</span>
+              <span className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-green-50 text-green-700 border border-green-100">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                12%
+              </span>
             </div>
-            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">{loading ? '...' : (count ?? '—')}</div>
-            <div className="text-sm font-medium text-gray-500">Total Products</div>
+            <div>
+              <div className="text-3xl font-extrabold text-gray-900 tracking-tight mb-1">{loading ? '...' : (count ?? '—')}</div>
+              <div className="text-sm font-semibold text-gray-500">Total Products</div>
+            </div>
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="card-premium p-5 group">
-          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-            <svg className="w-24 h-24 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </div>
+        <motion.div variants={item} className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white to-emerald-50/50 border border-emerald-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-emerald-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-2xl bg-emerald-50/80 text-emerald-600 shadow-sm border border-emerald-100">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <div className="p-3 rounded-2xl bg-emerald-100/50 text-emerald-600 ring-1 ring-emerald-50 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.totalSales?.toFixed?.(0) || '—'}</div>
-            <div className="text-sm font-medium text-gray-500">Total Sales</div>
+            <div>
+              <div className="text-3xl font-extrabold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.totalSales?.toLocaleString('en-BD') || '—'}</div>
+              <div className="text-sm font-semibold text-gray-500">Total Sales</div>
+            </div>
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="card-premium p-5 group">
-          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-            <svg className="w-24 h-24 text-violet-600" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-          </div>
+        <motion.div variants={item} className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white to-violet-50/50 border border-violet-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-violet-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-2xl bg-violet-50/80 text-violet-600 shadow-sm border border-violet-100">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              <div className="p-3 rounded-2xl bg-violet-100/50 text-violet-600 ring-1 ring-violet-50 group-hover:bg-violet-600 group-hover:text-white transition-colors duration-300">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
               </div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.todaySales?.toFixed?.(0) || '—'}</div>
-            <div className="text-sm font-medium text-gray-500">Today's Revenue</div>
+            <div>
+              <div className="text-3xl font-extrabold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.todaySales?.toLocaleString('en-BD') || '—'}</div>
+              <div className="text-sm font-semibold text-gray-500">Today's Revenue</div>
+            </div>
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="card-premium p-5 group">
-          <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-            <svg className="w-24 h-24 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-          </div>
+        <motion.div variants={item} className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-white to-amber-50/50 border border-amber-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-amber-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-2xl bg-amber-50/80 text-amber-600 shadow-sm border border-amber-100">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              <div className="p-3 rounded-2xl bg-amber-100/50 text-amber-600 ring-1 ring-amber-50 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
               </div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.averageOrderValue?.toFixed?.(0) || '—'}</div>
-            <div className="text-sm font-medium text-gray-500">Avg. Order Value</div>
+            <div>
+              <div className="text-3xl font-extrabold text-gray-900 tracking-tight mb-1">৳{metrics?.salesSummary?.averageOrderValue?.toLocaleString('en-BD') || '—'}</div>
+              <div className="text-sm font-semibold text-gray-500">Avg. Order Value</div>
+            </div>
           </div>
         </motion.div>
       </div>

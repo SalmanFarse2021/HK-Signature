@@ -310,30 +310,32 @@ export default function Products() {
                   <tr><td className="px-6 py-12 text-center text-gray-500" colSpan="6">No products found. Add one to get started.</td></tr>
                 ) : (
                   items.map((p) => (
-                    <tr key={p._id} className="hover:bg-gray-50/50 transition-colors group">
+                    <tr key={p._id} className="group border-b border-gray-100 last:border-none hover:bg-slate-50 transition-colors duration-200">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
-                          <div className="h-12 w-12 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0">
+                          <div className="h-16 w-16 rounded-xl bg-gray-50 border border-gray-100 shadow-sm overflow-hidden flex-shrink-0 group-hover:shadow-md transition-all duration-300">
                             {p.images?.[0]?.url ? (
-                              <img src={p.images[0].url} alt={p.name} className="h-full w-full object-cover" />
+                              <img src={p.images[0].url} alt={p.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             ) : (
                               <div className="h-full w-full flex items-center justify-center text-gray-300">
-                                <Icon name="products" className="w-5 h-5" />
+                                <Icon name="products" className="w-6 h-6" />
                               </div>
                             )}
                           </div>
                           <div className="min-w-0">
-                            <div className="font-medium text-gray-900 truncate max-w-[200px]" title={p.name}>{p.name}</div>
-                            <div className="text-xs text-gray-500">{Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(', ') : 'No sizes'}</div>
+                            <div className="font-bold text-gray-900 truncate max-w-[200px] text-base" title={p.name}>{p.name}</div>
+                            <div className="text-xs font-medium text-gray-400 mt-0.5 flex items-center gap-1">
+                              <span className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{Array.isArray(p.sizes) && p.sizes.length ? p.sizes.length : 0} Sizes</span>
+                            </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="relative max-w-[100px]">
-                          <span className="absolute left-2 top-1.5 text-gray-400 text-xs">৳</span>
+                        <div className="relative max-w-[120px] group/input">
+                          <span className="absolute left-3 top-2 text-gray-400 text-sm font-medium">৳</span>
                           <input
                             type="number"
-                            className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-black rounded px-2 py-1 pl-5 text-sm transition-colors outline-none"
+                            className="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-indigo-500 focus:bg-white rounded-lg px-2 py-1.5 pl-6 text-sm font-semibold text-gray-900 transition-all outline-none"
                             defaultValue={p.price}
                             onBlur={(e) => onQuickUpdate(p._id, { price: Number(e.target.value) })}
                           />
@@ -342,24 +344,24 @@ export default function Products() {
                       <td className="px-6 py-4">
                         <input
                           type="number"
-                          className={`w-20 bg-transparent border border-transparent hover:border-gray-200 focus:border-black rounded px-2 py-1 text-sm transition-colors outline-none ${p.stock < 10 ? 'text-rose-600 font-medium' : 'text-gray-600'}`}
+                          className={`w-24 bg-transparent border border-transparent hover:border-gray-200 focus:border-indigo-500 focus:bg-white rounded-lg px-3 py-1.5 text-sm font-medium transition-all outline-none ${p.stock < 10 ? 'text-rose-600 bg-rose-50/50' : 'text-gray-700'}`}
                           defaultValue={p.stock}
                           onBlur={(e) => onQuickUpdate(p._id, { stock: Number(e.target.value) })}
                         />
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
                           {p.category || 'Uncategorized'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-600">{p.brand || '—'}</td>
+                      <td className="px-6 py-4 text-gray-600 font-medium">{p.brand || '—'}</td>
                       <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Link to={`/products/${p._id}`} className="p-2 text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-2 group-hover:translate-x-0">
+                          <Link to={`/products/${p._id}`} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                           </Link>
-                          <button onClick={() => onDelete(p._id)} className="p-2 text-gray-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                          <button onClick={() => onDelete(p._id)} className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                           </button>
                         </div>
                       </td>
